@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.UUID;
 
 @Entity
@@ -21,7 +21,7 @@ public class ContaModel implements Serializable {
     @Column(nullable = false)
     private UUID idGerente;
     @Column(nullable = false)
-    private LocalDateTime dataCriacao;
+    private Date dataCriacao;
     @Column(columnDefinition = "numeric default 0")
     private double limite;
     @Column(columnDefinition = "numeric default 0")
@@ -53,11 +53,11 @@ public class ContaModel implements Serializable {
         this.idGerente = idGerente;
     }
 
-    public LocalDateTime getDataCriacao() {
+    public Date getDataCriacao() {
         return dataCriacao;
     }
 
-    public void setDataCriacao(LocalDateTime dataCriacao) {
+    public void setDataCriacao(Date dataCriacao) {
         this.dataCriacao = dataCriacao;
     }
 

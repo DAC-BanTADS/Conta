@@ -1,6 +1,5 @@
 package com.api.conta.amqp;
 
-import com.api.conta.controllers.ContaController;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -18,17 +17,18 @@ public class ContaReceiver {
     @Autowired
     private ContaProducer contaProducer;
     @Autowired
-    private ContaController contaController;
+    private ContaHelper contaHelper;
 
     @RabbitHandler
     public ContaTransfer receive(@Payload ContaTransfer contaTransfer) {
         if (contaTransfer.getAction().equals("save-conta")) {
             if (Objects.isNull(contaTransfer.getContaDto())) {
                 contaTransfer.setAction("failed-conta");
+                contaTransfer.setMessage(("Nenhum dado de Conta foi passado."));
                 return contaTransfer;
             }
 
-            ResponseEntity<Object> response = contaController.saveConta(contaTransfer.getContaDto());
+            ResponseEntity<Object> response = contaHelper.saveConta(contaTransfer.getContaDto());
 
             if (response.getStatusCode().equals(HttpStatus.CREATED)) {
                 contaTransfer.setAction("success-conta");
@@ -36,9 +36,12 @@ public class ContaReceiver {
             }
 
             contaTransfer.setAction("failed-conta");
+            contaTransfer.setMessage(Objects.requireNonNull(response.getBody()).toString());
             return contaTransfer;
         }
 
-        return null;
+        contaTransfer.setAction("failed-conta");
+        contaTransfer.setMessage("Ação informada não existe.");
+        return contaTransfer;
     }
 }

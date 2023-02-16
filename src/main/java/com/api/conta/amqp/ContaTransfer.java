@@ -6,6 +6,7 @@ import java.io.Serializable;
 public class ContaTransfer implements Serializable {
     ContaDto contaDto;
     String action;
+    String message;
 
     public ContaTransfer() {
     }
@@ -29,5 +30,13 @@ public class ContaTransfer implements Serializable {
 
     public void setAction(String action) {
         this.action = action;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 }
