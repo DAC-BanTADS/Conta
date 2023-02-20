@@ -56,4 +56,16 @@ public class ContaController {
         }
         return ResponseEntity.status(HttpStatus.OK).body(contaModelList);
     }
+
+    @GetMapping("/melhores/{idGerente}")
+    public ResponseEntity<Object> getMelhoresContaByIdGerente(
+            @PathVariable(value = "idGerente") UUID idGerente
+    ){
+        List<ContaModel> contaModelList = contaService.findByIdGerenteMelhores(idGerente);
+
+        if (contaModelList.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Nenhuma conta encontrada.");
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(contaModelList);
+    }
 }

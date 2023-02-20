@@ -31,4 +31,6 @@ public class ContaService {
     }
 
     public boolean existsByIdCliente(UUID idCliente) { return contaRepository.existsByIdCliente(idCliente); }
+
+    public List<ContaModel> findByIdGerenteMelhores(UUID idGerente) { return contaRepository.findByIdGerenteMelhores(idGerente); }
 }
