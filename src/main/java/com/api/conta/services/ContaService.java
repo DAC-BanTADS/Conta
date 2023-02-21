@@ -14,7 +14,7 @@ public class ContaService {
     final ContaRepository contaRepository;
 
     @Transactional
-    public Object save(ContaModel contaModel) { return contaRepository.save(contaModel); }
+    public ContaModel save(ContaModel contaModel) { return contaRepository.save(contaModel); }
 
     public ContaService(ContaRepository contaRepository) {
         this.contaRepository = contaRepository;
@@ -28,6 +28,15 @@ public class ContaService {
 
     public List<ContaModel> findByIdGerenteAndAtivo(UUID idGerente, Boolean ativo) {
         return contaRepository.findByIdGerenteAndAtivo(idGerente, ativo);
+    }
+
+    public Optional<ContaModel> findByIdGerenteSaga(UUID idGerenteAntigo) {
+        return contaRepository.findByIdGerenteSaga(idGerenteAntigo);
+    }
+
+    @Transactional
+    public void delete(ContaModel contaModel) {
+        contaRepository.delete(contaModel);
     }
 
     public boolean existsByIdCliente(UUID idCliente) { return contaRepository.existsByIdCliente(idCliente); }

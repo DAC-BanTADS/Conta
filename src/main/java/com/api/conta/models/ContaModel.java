@@ -1,6 +1,7 @@
 package com.api.conta.models;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.GenericGenerator;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -14,7 +15,9 @@ public class ContaModel implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+    @Column(unique = true, updatable = false, nullable = false)
     private UUID id;
     @Column(nullable = false, unique = true)
     private UUID idCliente;
