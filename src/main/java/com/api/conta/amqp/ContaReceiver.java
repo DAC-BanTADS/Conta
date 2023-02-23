@@ -78,6 +78,25 @@ public class ContaReceiver {
             return contaTransfer;
         }
 
+        if (contaTransfer.getAction().equals("update-gerente-delete")) {
+            String[] substrings = contaTransfer.getMessage().split("\\+");
+
+            UUID idGerenteAntigo = UUID.fromString(substrings[0]);
+            UUID idGerenteAtual = UUID.fromString(substrings[1]);
+
+            ResponseEntity<String> response = contaHelper.updateContaByIdGerenteDelete(idGerenteAntigo, idGerenteAtual);
+
+            if (response.getStatusCode().equals(HttpStatus.OK)) {
+                contaTransfer.setAction("success-conta");
+                contaTransfer.setMessage(Objects.requireNonNull(response.getBody()));
+                return contaTransfer;
+            }
+
+            contaTransfer.setAction("failed-conta");
+            contaTransfer.setMessage(Objects.requireNonNull(response.getBody()));
+            return contaTransfer;
+        }
+
         if (contaTransfer.getAction().equals("delete-conta")) {
             UUID idDelete = UUID.fromString(contaTransfer.getMessage());
 

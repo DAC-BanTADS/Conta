@@ -55,6 +55,20 @@ public class ContaHelper {
         return ResponseEntity.status(HttpStatus.OK).body(contaModelOptional.get().getId().toString());
     }
 
+    public ResponseEntity<String> updateContaByIdGerenteDelete(UUID idGerenteAntigo, UUID idGerenteAtual){
+        List<ContaModel> contaModelList = contaService.findByIdGerente(idGerenteAntigo);
+        if (contaModelList.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Contas não encontradas.");
+        }
+
+        for (ContaModel contaModel : contaModelList) {
+            contaModel.setIdGerente(idGerenteAtual);
+            contaService.save(contaModel);
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body("Contas atualizadas.");
+    }
+
     public ResponseEntity<ContaDto> deleteConta(UUID id){
         Optional<ContaModel> contaModelOptional = contaService.findByIdCliente(id);
         if (!contaModelOptional.isPresent()) {
