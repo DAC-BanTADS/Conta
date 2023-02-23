@@ -1,7 +1,9 @@
 package com.api.conta.controllers;
 
+import com.api.conta.dtos.ContaDto;
 import com.api.conta.models.ContaModel;
 import com.api.conta.services.ContaService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +20,18 @@ public class ContaController {
 
     public ContaController(ContaService contaService) {
         this.contaService = contaService;
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Object> alterarConta(@PathVariable(value = "id") UUID id, @RequestBody ContaDto contaDto) {
+        Optional<ContaModel> contaModelOptional = contaService.findById(id);
+        if (!contaModelOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Conta não encontrada.");
+        }
+        var contaModel = new ContaModel();
+        BeanUtils.copyProperties(contaDto, contaModel);
+        contaModel.setId(contaModelOptional.get().getId());
+        return ResponseEntity.status(HttpStatus.OK).body(contaService.save(contaModel));
     }
 
     @GetMapping("/{id}")
